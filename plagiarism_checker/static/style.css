@@ -1,28 +1,323 @@
-body {
-    background-color: #f8f9fa;
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Cards */
 .card {
     border-radius: 15px;
     border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
     border-radius: 15px 15px 0 0 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border: none;
 }
 
+.card-header.bg-light {
+    background: #f8f9fa !important;
+    color: #333 !important;
+}
+
+.card-header.bg-info {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+}
+
+.card-header.bg-success {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+}
+
+.card-header.bg-warning {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+}
+
+/* Shadows */
 .shadow {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.shadow-lg {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Buttons */
 .btn {
     border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
 }
 
-.form-control {
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3b8b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Form Controls */
+.form-control, .form-select {
     border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 10px 15px;
 }
 
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    opacity: 0.9;
+}
+
+/* Badges */
 .badge {
-    font-size: 1em;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+}
+
+.badge.bg-secondary {
+    background: #95a5a6 !important;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 12px;
+    border: none;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d4f1f4 0%, #c3e7ea 100%);
+    border-left: 4px solid #3498db;
+    color: #2c3e50;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+    border-left: 4px solid #e74c3c;
+    color: #7b241c;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d5f4e6 0%, #c8e6c9 100%);
+    border-left: 4px solid #27ae60;
+    color: #1e5631;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fdebd0 0%, #fad7a0 100%);
+    border-left: 4px solid #f39c12;
+    color: #7d6608;
+}
+
+/* Progress Bar */
+.progress {
+    border-radius: 10px;
+    background-color: #e9ecef;
+    height: 25px;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Text Utilities */
+.display-4 {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.fw-bold {
+    font-weight: 600;
+}
+
+.text-muted {
+    color: #7f8c8d !important;
+}
+
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Accordion */
+.accordion-button {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.accordion-button:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card, .alert {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Spinner */
+.spinner-border-sm {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-width: 0.2em;
+}
+
+/* Input Group */
+.input-group {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border-right: none;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+    
+    .btn, .navbar, footer, .form-control {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
 }
