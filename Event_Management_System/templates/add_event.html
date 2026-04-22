@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Add Event - Event Management System{% endblock %}
+{% block page_title %}Add Event{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add New Event</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Event Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Event Type</label>
+                        <select class="form-control" id="type" name="type" required>
+                            <option value="">Select Type</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Concert">Concert</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="budget" class="form-label">Budget</label>
+                        <input type="number" step="0.01" class="form-control" id="budget" name="budget" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expected_guests" class="form-label">Expected Guests</label>
+                        <input type="number" class="form-control" id="expected_guests" name="expected_guests" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ticket_price" class="form-label">Ticket Price (per guest)</label>
+                        <input type="number" step="0.01" class="form-control" id="ticket_price" name="ticket_price">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Event</button>
+                    <a href="{{ url_for('events') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

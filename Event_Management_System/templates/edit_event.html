@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Event - Event Management System{% endblock %}
+{% block page_title %}Edit Event{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Event</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Event Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ event.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Event Type</label>
+                        <select class="form-control" id="type" name="type" required>
+                            <option value="Wedding" {% if event.type == 'Wedding' %}selected{% endif %}>Wedding</option>
+                            <option value="Birthday" {% if event.type == 'Birthday' %}selected{% endif %}>Birthday</option>
+                            <option value="Corporate" {% if event.type == 'Corporate' %}selected{% endif %}>Corporate</option>
+                            <option value="Concert" {% if event.type == 'Concert' %}selected{% endif %}>Concert</option>
+                            <option value="Other" {% if event.type == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ event.date }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" value="{{ event.location }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="budget" class="form-label">Budget</label>
+                        <input type="number" step="0.01" class="form-control" id="budget" name="budget" value="{{ event.budget }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expected_guests" class="form-label">Expected Guests</label>
+                        <input type="number" class="form-control" id="expected_guests" name="expected_guests" value="{{ event.expected_guests }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ticket_price" class="form-label">Ticket Price (per guest)</label>
+                        <input type="number" step="0.01" class="form-control" id="ticket_price" name="ticket_price" value="{{ event.ticket_price }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Event</button>
+                    <a href="{{ url_for('events') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

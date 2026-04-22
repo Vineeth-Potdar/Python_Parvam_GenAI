@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Vendor - Event Management System{% endblock %}
+{% block page_title %}Edit Vendor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Vendor</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Vendor Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ vendor.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="service_type" class="form-label">Service Type</label>
+                        <select class="form-control" id="service_type" name="service_type" required>
+                            <option value="Catering" {% if vendor.service_type == 'Catering' %}selected{% endif %}>Catering</option>
+                            <option value="Decoration" {% if vendor.service_type == 'Decoration' %}selected{% endif %}>Decoration</option>
+                            <option value="Photography" {% if vendor.service_type == 'Photography' %}selected{% endif %}>Photography</option>
+                            <option value="Music" {% if vendor.service_type == 'Music' %}selected{% endif %}>Music</option>
+                            <option value="Transportation" {% if vendor.service_type == 'Transportation' %}selected{% endif %}>Transportation</option>
+                            <option value="Other" {% if vendor.service_type == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost" class="form-label">Cost</label>
+                        <input type="number" step="0.01" class="form-control" id="cost" name="cost" value="{{ vendor.cost }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_id" class="form-label">Event</label>
+                        <select class="form-control" id="event_id" name="event_id">
+                            <option value="">Select Event</option>
+                            {% for event in events %}
+                            <option value="{{ event.id }}" {% if vendor.event_id == event.id %}selected{% endif %}>{{ event.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Vendor</button>
+                    <a href="{{ url_for('vendors') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

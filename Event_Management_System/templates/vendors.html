@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Vendors - Event Management System{% endblock %}
+{% block page_title %}Vendors{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Vendor Management</h2>
+    <a href="{{ url_for('add_vendor') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Vendor</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Service Type</th>
+                        <th>Cost</th>
+                        <th>Event</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendor in vendors %}
+                    <tr>
+                        <td>{{ vendor.name }}</td>
+                        <td>{{ vendor.service_type }}</td>
+                        <td>${{ "%.2f"|format(vendor.cost) }}</td>
+                        <td>{{ vendor.event_name or 'N/A' }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_vendor', vendor_id=vendor.id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('delete_vendor', vendor_id=vendor.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

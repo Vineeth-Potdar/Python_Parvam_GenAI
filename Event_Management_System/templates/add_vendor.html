@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Add Vendor - Event Management System{% endblock %}
+{% block page_title %}Add Vendor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Add New Vendor</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Vendor Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="service_type" class="form-label">Service Type</label>
+                        <select class="form-control" id="service_type" name="service_type" required>
+                            <option value="">Select Service Type</option>
+                            <option value="Catering">Catering</option>
+                            <option value="Decoration">Decoration</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Music">Music</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost" class="form-label">Cost</label>
+                        <input type="number" step="0.01" class="form-control" id="cost" name="cost" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_id" class="form-label">Event</label>
+                        <select class="form-control" id="event_id" name="event_id">
+                            <option value="">Select Event</option>
+                            {% for event in events %}
+                            <option value="{{ event.id }}">{{ event.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Vendor</button>
+                    <a href="{{ url_for('vendors') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

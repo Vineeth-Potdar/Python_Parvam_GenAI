@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Customer - Event Management System{% endblock %}
+{% block page_title %}Edit Customer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Customer</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ customer.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contact" class="form-label">Contact</label>
+                        <input type="text" class="form-control" id="contact" name="contact" value="{{ customer.contact }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_id" class="form-label">Event</label>
+                        <select class="form-control" id="event_id" name="event_id">
+                            <option value="">Select Event</option>
+                            {% for event in events %}
+                            <option value="{{ event.id }}" {% if customer.event_id == event.id %}selected{% endif %}>{{ event.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="Pending" {% if customer.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Confirmed" {% if customer.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                            <option value="Completed" {% if customer.status == 'Completed' %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Customer</button>
+                    <a href="{{ url_for('customers') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
