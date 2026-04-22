@@ -1,233 +1,246 @@
 # 🔍 AI-Powered Plagiarism Checker
 
-A modern, full-stack Flask web application that detects plagiarism using TF-IDF similarity analysis and Google's Gemini AI for semantic comparison.
+A modern Flask-based web application that detects plagiarism using a **hybrid approach** combining **TF-IDF (statistical similarity)** and **Google Gemini AI (semantic analysis)** with a weighted final score.
+
+---
 
 ## 📋 Features
 
 ✅ **PDF File Upload** - Upload two PDF documents for comparison
-✅ **TF-IDF Analysis** - Machine learning-based similarity detection
-✅ **Gemini AI Integration** - Advanced semantic analysis with explanations
-✅ **User-Friendly Interface** - Clean Bootstrap 5 UI with responsive design
-✅ **Real-time Results** - Instant plagiarism reports with detailed insights
-✅ **Error Handling** - Graceful handling of invalid files and API errors
-✅ **Print Support** - Export results as PDF
+✅ **TF-IDF Analysis** - Statistical similarity detection using NLP
+✅ **Gemini AI (Flash Model)** - Advanced semantic plagiarism detection
+✅ **Weighted Final Score** - Combines TF-IDF and AI (90% AI weight)
+✅ **Web-Assisted Verification** - Generate Google search queries for manual checking
+✅ **Modern UI** - Responsive Bootstrap 5 interface
+✅ **Detailed Reports** - Explanation of similarities and overlapping ideas
+✅ **Print Support** - Export results easily
+
+---
+
+## 🧠 How It Works
+
+This system uses **two complementary methods**:
+
+### 1. TF-IDF (Lexical Similarity)
+
+* Measures word overlap and frequency
+* Uses:
+
+  * Word n-grams
+  * Character n-grams
+* Good for detecting direct copying
+
+### 2. Gemini AI (Semantic Similarity)
+
+* Understands meaning and context
+* Detects:
+
+  * Paraphrasing
+  * Reworded plagiarism
+  * Structural similarity
+
+---
+
+## 🎯 Final Score Calculation
+
+The final plagiarism score is calculated using a weighted approach:
+
+```python
+final_score = (tfidf_score * 0.1) + (gemini_score * 0.9)
+```
+
+### Gemini Score Mapping:
+
+| Level    | Score |
+| -------- | ----- |
+| High     | 95    |
+| Moderate | 65    |
+| Low      | 30    |
+
+👉 **AI is prioritized**, making the system more accurate for real-world plagiarism detection.
+
+---
+
+## 📊 Result Interpretation
+
+| Final Score | Meaning             |
+| ----------- | ------------------- |
+| 0 – 50%     | Low similarity      |
+| 50 – 75%    | Moderate similarity |
+| 75 – 100%   | High plagiarism     |
+
+---
+
+## 🌐 Web-Assisted Verification
+
+The system also:
+
+* Extracts key sentences
+* Generates a **Google search query**
+* Allows users to manually verify sources
+
+⚠️ Note: This is for **manual verification**, not automatic web plagiarism detection.
+
+---
 
 ## 🏗️ Project Structure
 
 ```
 plagiarism_checker/
-├── app.py                    # Flask backend application
-├── requirements.txt          # Python dependencies
-├── .env                      # Environment variables (API key)
-├── README.md                 # This file
-│
+├── app.py
+├── requirements.txt
+├── .env
 ├── templates/
-│   ├── base.html            # Base template with navbar
-│   ├── index.html           # Upload page
-│   └── result.html          # Results display page
-│
+│   ├── base.html
+│   ├── index.html
+│   └── result.html
 ├── static/
-│   └── style.css            # Custom styling
-│
-└── uploads/                 # Temporary PDF uploads (auto-created)
+│   └── style.css
+└── uploads/
 ```
+
+---
 
 ## 📦 Requirements
 
-- Python 3.8+
-- Flask 3.0.0
-- PyPDF2 4.0.1
-- pdfplumber 0.10.3
-- scikit-learn 1.3.2
-- google-generativeai 0.3.0
-- python-dotenv 1.0.0
+* Python 3.8+
+* Flask
+* scikit-learn
+* pdfplumber
+* PyPDF2
+* python-dotenv
+* google-genai
 
-## 🚀 Quick Start
+---
 
-### 1. Clone or Navigate to Project
+## 🚀 Setup Instructions
 
-```bash
-cd plagiarism_checker
-```
+### 1. Create Virtual Environment
 
-### 2. Create Virtual Environment
-
-#### Windows
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-#### macOS/Linux
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure Gemini API Key
+### 3. Add API Key
 
-#### Option A: Get Your API Key
-1. Visit [Google AI Studio](https://ai.google.dev/)
-2. Click "Get API Key"
-3. Create a new API key in Google Cloud Console
+Create `.env` file:
 
-#### Option B: Set Environment Variable
-
-Edit `.env` file and add your API key:
-```
+```env
 GEMINI_API_KEY=your_api_key_here
 ```
 
-### 5. Run Application
+⚠️ Do NOT hardcode your API key in code.
+
+---
+
+### 4. Run the App
 
 ```bash
 python app.py
 ```
 
-The application will start at `http://localhost:5000`
-
-## 🎯 Usage Guide
-
-### Step 1: Upload PDFs
-1. Navigate to the home page
-2. Click on "Upload PDF 1" and select your first document
-3. Click on "Upload PDF 2" and select your second document
-4. Click "Analyze Plagiarism"
-
-### Step 2: View Results
-The results page will show:
-- **TF-IDF Similarity Score** - Percentage match using machine learning
-- **Gemini AI Analysis** - Semantic similarity level and explanation
-- **Text Preview** - First 500 characters from each PDF
-- **Recommendations** - Next steps based on similarity level
-
-### Step 3: Interpret Results
-
-| Similarity | Assessment | Action |
-|-----------|-----------|--------|
-| 0-30% | Low | Document is likely original |
-| 30-70% | Moderate | Review for proper citations |
-| 70-100% | High | Investigate potential plagiarism |
-
-## 🔑 Environment Variables
-
-```env
-# Gemini API Configuration
-GEMINI_API_KEY=your_key_here
-
-# Flask Configuration (optional)
-FLASK_ENV=development
-FLASK_DEBUG=True
-```
-
-## 🎨 Frontend Features
-
-- **Bootstrap 5** - Responsive and modern UI
-- **Custom CSS** - Gradient backgrounds and smooth animations
-- **Form Validation** - Client-side file type and size checks
-- **Loading States** - Visual feedback during processing
-- **FAQs** - Built-in help section
-
-## ⚙️ Backend Architecture
-
-### Flask Routes
-
-| Route | Method | Purpose |
-|-------|--------|---------|
-| `/` | GET | Upload page |
-| `/check` | POST | Process PDFs and return results |
-
-### Key Functions
-
-- `extract_text_from_pdf()` - Extract text using pdfplumber/PyPDF2
-- `preprocess_text()` - Clean and normalize text
-- `calculate_tfidf_similarity()` - ML-based similarity calculation
-- `get_gemini_analysis()` - Call Gemini API for AI analysis
-
-## 🔒 Security Features
-
-- ✅ Secure filename handling with `werkzeug.utils.secure_filename`
-- ✅ File type validation (PDF only)
-- ✅ File size limits (10MB max)
-- ✅ Temporary file cleanup
-- ✅ Error handling for malformed PDFs
-- ✅ Environment variable protection
-
-## 🐛 Troubleshooting
-
-### Issue: "ModuleNotFoundError"
-**Solution:** Ensure virtual environment is activated and dependencies installed
-```bash
-pip install -r requirements.txt
-```
-
-### Issue: "GEMINI_API_KEY not found"
-**Solution:** Check `.env` file has correct API key and format
-```
-GEMINI_API_KEY=your_actual_key_here
-```
-
-### Issue: "PDF extraction failed"
-**Solution:** Ensure PDF is valid and not encrypted/password-protected
-
-### Issue: "413 Request Entity Too Large"
-**Solution:** Maximum file size is 10MB. Use smaller PDFs or split documents
-
-## 📊 API Integration
-
-### Google Gemini API
-
-The application uses Google's Generative AI API for semantic analysis.
-
-**Request:**
-- Model: `gemini-pro`
-- Prompt: Comparative analysis of two documents
-- Max Input: ~5000 characters per document
-
-**Response:**
-- Similarity Level: Low/Moderate/High
-- Detailed Explanation
-- Key Overlapping Ideas
-
-## 🔄 Workflow
+Open:
 
 ```
-1. User uploads 2 PDFs
-   ↓
-2. Extract text from both PDFs
-   ↓
-3. Calculate TF-IDF similarity (SKLearn)
-   ↓
-4. Send to Gemini API for semantic analysis
-   ↓
-5. Display results with recommendations
-   ↓
-6. Clean up temporary files
+http://127.0.0.1:5000
 ```
 
-## 📈 Performance
+---
 
-- **PDF Processing:** < 2 seconds per document
-- **TF-IDF Calculation:** < 1 second
-- **Gemini API Call:** 2-10 seconds (depends on content length)
-- **Total Processing:** ~5-15 seconds
+## 🔧 Backend Workflow
 
-## 🎓 Learning Resources
+```
+1. Upload PDFs
+2. Extract text
+3. Preprocess text
+4. Compute TF-IDF similarity
+5. Perform Gemini AI analysis
+6. Combine scores (weighted)
+7. Display results
+8. Provide web verification
+```
 
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [Scikit-learn TF-IDF](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting)
-- [PyPDF2 Documentation](https://pypdf2.readthedocs.io/)
-- [Google Generative AI](https://ai.google.dev/tutorials/python_quickstart)
+---
+
+## ⚙️ Key Functions
+
+* `extract_text_from_pdf()`
+* `preprocess_text()`
+* `calculate_tfidf_similarity()`
+* `get_gemini_analysis()`
+* `combine_scores()`
+* `extract_query()`
+* `generate_search_links()`
+
+---
+
+## 🔒 Security
+
+* Secure file handling
+* File size limits
+* Environment-based API keys
+* Temporary file cleanup
+
+---
+
+## 🧪 Test Cases
+
+### ✔ High Similarity
+
+* Near identical content
+  → Result: HIGH
+
+### ✔ Moderate Similarity
+
+* Paraphrased content
+  → Result: MODERATE
+
+### ✔ Low Similarity
+
+* Different topics
+  → Result: LOW
+
+---
+
+## 🎤 Viva Explanation (Important)
+
+> “The system combines lexical similarity (TF-IDF) and semantic similarity (Gemini AI). The final score prioritizes AI analysis, making it more reliable for detecting paraphrased plagiarism.”
+
+---
+
+## ⚠️ Limitations
+
+* TF-IDF may give false positives due to common words
+* AI responses depend on API availability
+* No automatic web plagiarism detection (manual verification only)
+
+---
+
+## 🚀 Future Improvements
+
+* Highlight matching text sections
+* Multi-document comparison
+* DOCX/TXT support
+* Database storage
+* User authentication
+
+---
 
 ## 📝 License
 
-This project is open source and available for educational purposes.
+Educational use only.
+
+---
+
+**Built using Flask + Gemini AI 🚀**
+
 
 ## 🤝 Contributing
 
