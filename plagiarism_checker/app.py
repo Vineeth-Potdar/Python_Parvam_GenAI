@@ -2,6 +2,8 @@ import os
 import re
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 import PyPDF2
 import pdfplumber
 from google import genai
@@ -68,6 +70,15 @@ def preprocess_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
 
     return text
+def extract_query(text):
+    sentences = text.split('.')
+    
+    for s in sentences:
+        s = s.strip()
+        if len(s) > 30:
+            return s[:120]
+    
+    return text[:120]
 
 def calculate_tfidf_similarity(text1, text2):
     try:
@@ -81,7 +92,7 @@ def calculate_tfidf_similarity(text1, text2):
         word_vectorizer = TfidfVectorizer(
             max_features=3000,
             ngram_range=(1, 2),
-            stop_words=None,
+            stop_words="english",
             lowercase=True
         )
 
@@ -105,20 +116,28 @@ def calculate_tfidf_similarity(text1, text2):
     except Exception as e:
         print(f"Error calculating TF-IDF similarity: {e}")
         return 0.0
-    
+import urllib.parse
+
+def generate_search_links(query):
+    query = query.replace('\n', ' ').strip()
+
+    encoded_query = urllib.parse.quote(query)
+
+    google_url = f"https://www.google.com/search?q={encoded_query}"
+
+    return google_url
+
 def combine_scores(tfidf_score, gemini_level):
-    # Convert Gemini level to numeric
     if gemini_level == "High":
-        gemini_score = 80
+        gemini_score = 95
     elif gemini_level == "Moderate":
-        gemini_score = 50
+        gemini_score = 65
     elif gemini_level == "Low":
-        gemini_score = 20
+        gemini_score = 30
     else:
         gemini_score = 0
 
-    # Weighted combination
-    final_score = (tfidf_score * 0.2) + (gemini_score * 0.8)
+    final_score = (tfidf_score * 0.1) + (gemini_score * 0.9)
 
     return round(final_score, 2)
 
@@ -137,28 +156,33 @@ def get_gemini_analysis(text1, text2):
         text1_limited = text1[:max_length]
         text2_limited = text2[:max_length]
 
+        combined_text = (text1_limited + "\n\n" + text2_limited)
+
         prompt = f"""
-Compare the following two texts and analyze plagiarism.
+        Compare the following two texts for plagiarism.
 
-TEXT 1:
-{text1_limited}
+        Give:
+        - Similarity Level (Low / Moderate / High)
+        - Short explanation
+        - Key overlapping ideas
 
-TEXT 2:
-{text2_limited}
+        TEXT:
+        {combined_text}
+        """
 
-Give:
-1. Similarity Level (Low / Moderate / High)
-2. Short explanation (3-4 lines)
-3. Key overlapping ideas (bullet points)
-"""
-
-        # ✅ NEW Gemini API call
+        # ✅ NEW Gemini API call    
         response = client.models.generate_content(
             model="gemini-flash-latest",
             contents=prompt
         )
 
-        analysis_text = response.text
+        try:
+            analysis_text = response.text
+        except:
+            try:
+                analysis_text = response.candidates[0].content.parts[0].text
+            except:
+                analysis_text = str(response)
 
         # Simple level detection
         level = "Moderate"
@@ -166,6 +190,8 @@ Give:
 
         if "high" in text_lower:
             level = "High"
+        elif "moderate" in text_lower:
+            level = "Moderate"
         elif "low" in text_lower:
             level = "Low"
 
@@ -176,7 +202,7 @@ Give:
         }
 
     except Exception as e:
-        print("Gemini Error:", str(e))  # Debug in terminal
+        print("Gemini FULL ERROR:", repr(e))
 
         return {
             'level': 'Unavailable',
@@ -231,7 +257,8 @@ def check():
             # Extract text from PDFs
             text1 = extract_text_from_pdf(filepath1)
             text2 = extract_text_from_pdf(filepath2)
-            
+            query = extract_query(text1 + " " + text2)
+            search_link = generate_search_links(query)
             if not text1 or not text2:
                 flash('Could not extract text from one or both PDFs. Please ensure PDFs contain extractable text.', 'error')
                 return redirect(url_for('index'))
@@ -259,6 +286,8 @@ def check():
             results = {
                 'final_similarity': final_similarity,
                 'tfidf_similarity': tfidf_similarity,
+                'search_link': search_link,
+                'query': query,
                 'gemini_level': gemini_analysis['level'],
                 'gemini_explanation': gemini_analysis['explanation'],
                 'overlapping_ideas': gemini_analysis['overlapping_ideas'],
@@ -307,6 +336,7 @@ def not_found_error(error):
 
 if __name__ == '__main__':
     # Run Flask app
+    print("KEY:", GEMINI_API_KEY)
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_DEBUG', 'False') == 'True'
     app.run(debug=debug, port=port, host='0.0.0.0')

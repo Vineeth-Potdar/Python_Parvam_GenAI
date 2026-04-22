@@ -161,8 +161,24 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="card shadow mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Overall Plagiarism Score</h5>
+                </div>
+                <div class="card-body text-center">
+                    <h1>{{ results.final_similarity }}%</h1>
 
+                    {% if results.final_similarity > 75 %}
+                        <span class="badge bg-danger fs-5">HIGH PLAGIARISM</span>
+                    {% elif results.final_similarity > 50 %}
+                        <span class="badge bg-warning text-dark fs-5">MODERATE</span>
+                    {% else %}
+                        <span class="badge bg-success fs-5">LOW</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
         <!-- Recommendations -->
         <div class="card shadow mb-4">
             <div class="card-header bg-warning text-dark">
@@ -171,22 +187,22 @@
                 </h5>
             </div>
             <div class="card-body">
-                {% if results.tfidf_similarity <= 30 and 'low' in results.gemini_level.lower() %}
-                    <div class="alert alert-success">
-                        <strong>✓ Assessment:</strong> Both analysis methods indicate low plagiarism. 
-                        The documents appear to be largely original.
-                    </div>
-                {% elif results.tfidf_similarity <= 70 or 'moderate' in results.gemini_level.lower() %}
-                    <div class="alert alert-warning">
-                        <strong>⚠ Assessment:</strong> Moderate similarity detected. 
-                        Review the highlighted sections and ensure proper citations are provided.
-                    </div>
-                {% else %}
-                    <div class="alert alert-danger">
-                        <strong>✗ Assessment:</strong> High similarity detected. 
-                        This may indicate potential plagiarism. Further investigation is recommended.
-                    </div>
-                {% endif %}
+                {% if results.final_similarity > 75 %}
+                <div class="alert alert-danger">
+                    <strong>✗ Assessment:</strong> High similarity detected. 
+                    This indicates strong potential plagiarism based on AI analysis.
+                </div>
+            {% elif results.final_similarity > 50 %}
+                <div class="alert alert-warning">
+                    <strong>⚠ Assessment:</strong> Moderate similarity detected. 
+                    Review the highlighted sections and ensure proper citations are provided.
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    <strong>✓ Assessment:</strong> Low similarity detected. 
+                    The documents appear to be largely original.
+                </div>
+            {% endif %}
                 
                 <h6 class="mt-3">Next Steps:</h6>
                 <ul>
@@ -195,6 +211,18 @@
                     <li>If high similarity is detected, verify citations and original sources</li>
                     <li>Consider running additional plagiarism checks with other tools</li>
                 </ul>
+                <div class="mt-4">
+                    <h6>🔍 Verify with Web Search</h6>
+                    <p class="text-muted">
+                        You can manually check similar content online using the generated query.
+                    </p>
+
+                    <p><strong>Search Query:</strong> "{{ results.query }}"</p>
+
+                    <a href="{{ results.search_link }}" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-search"></i> Search Similar Content on Google
+                    </a>
+                </div>
             </div>
         </div>
 
